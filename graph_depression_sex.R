@@ -42,49 +42,71 @@ dev.off()
 pdf("sex_differences_all_maternal_depression.pdf", width=14, height=4, compress=FALSE)
 par(mfrow=c(1,9))
 myBox <- function(x, y, ylab, xlab) boxplot(x ~ y, col=c("#FF6600", "#0000CC"), names=c("Girls", "Boys"),ylab=ylab, xlab=xlab)
+# mapply(myBox,
+#        x = NEW[,c("Pren_CESD", "HWB6_CESD", "HWB12_CESD", "HWB24_CESD", "HWB36_CESD",	"HWB48_CESD",	"HWB60_CESD",	"HWB72_CESD", "auc_post_cesd")],
+#        y = list(NEW$gender_male), # we make this a list so it has length(1)
+#        ylab = c("Prenatal CESD", "CESD 6m", "CESD 12m", "CESD 24m", "CESD 36m",	"CESD 48m",	"CESD 60m",	"CESD 72m", "Total postnatal depression (AUC)"),
+#        xlab = "" # empty x-lab
+# )
 mapply(myBox,
        x = NEW[,c("Pren_CESD", "HWB6_CESD", "HWB12_CESD", "HWB24_CESD", "HWB36_CESD",	"HWB48_CESD",	"HWB60_CESD",	"HWB72_CESD", "auc_post_cesd")],
        y = list(NEW$gender_male), # we make this a list so it has length(1)
-       ylab = c("Prenatal CESD", "CESD 6m", "CESD 12m", "CESD 24m", "CESD 36m",	"CESD 48m",	"CESD 60m",	"CESD 72m", "Total postnatal depression (AUC)"),
+       ylab = c("Prenatal Depression", "Depression 6m", "Depression 12m", "Depression 24m", "Depression 36m",	"Depression 48m",	"Depression 60m",	"Depression 72m", "Total Postnatal Depression"),
        xlab = "" # empty x-lab
 )
 dev.off()
 
 NEW = read.csv("MAVAN_48M_and_up_jun2020.csv")
 
-median(NEW$ADHD)
+# median(NEW$ADHD)
 #DEFAULT IS MEDIAN
 
 NEW$ADHD_d = 0
-NEW$ADHD_d <- dicho(
-    NEW$ADHD,
-    dich.by(),
-    as.num = TRUE,
-    var.label = "ADHD (dichotomized)",
-    val.labels = c("low", "high"),
-    append = TRUE,
-    suffix = "_d"
+# NEW$ADHD_d <- dicho(
+#     NEW$ADHD,
+#     dich.by(),
+#     as.num = TRUE,
+#     var.label = "ADHD (dichotomized)",
+#     val.labels = c("low", "high"),
+#     append = TRUE,
+#     suffix = "_d"
+# )
+# head(NEW$ADHD_d)
+# 
+# NEW$ADHD_d<- sjmisc::dicho(
+#                   NEW$ADHD,
+#                   dich.by = "median",
+#                   as.num = TRUE,
+#                   var.label = NULL,
+#                   val.labels = NULL,
+#                   append = TRUE,
+#                   suffix = "_d"
+# )
+
+NEW$ADHD_d<-sjmisc::dicho(NEW$ADHD,
+                          dich.by = "median",
+                          as.num = TRUE,
+                          var.label = NULL,
+                          val.labels = NULL,
+                          append = TRUE,
+                          suffix = "_d"
 )
 head(NEW$ADHD_d)
-
-NEW$ADHD_d<- sjmisc::dicho(
-                  NEW$ADHD,
-                  dich.by = "median",
-                  as.num = TRUE,
-                  var.label = NULL,
-                  val.labels = NULL,
-                  append = TRUE,
-                  suffix = "_d"
-)
 
 # png(filename = 'low_and_high_differences_all_maternal_depression.png', width=1000, height=400)
 pdf("low_and_high_differences_all_maternal_depression.pdf", width=14, height=4, compress=FALSE)
 par(mfrow=c(1,9))
 myBox <- function(x, y, ylab, xlab) boxplot(x ~ y, col=c("#FF6600", "#0000CC"), names=c("Low", "High"),ylab=ylab, xlab=xlab)
+# mapply(myBox,
+#        x = NEW[,c("Pren_CESD", "HWB6_CESD", "HWB12_CESD", "HWB24_CESD", "HWB36_CESD",	"HWB48_CESD",	"HWB60_CESD",	"HWB72_CESD", "auc_post_cesd")],
+#        y = list(NEW$ADHD_d), # we make this a list so it has length(1)
+#        ylab = c("Prenatal CESD", "CESD 6m", "CESD 12m", "CESD 24m", "CESD 36m",	"CESD 48m",	"CESD 60m",	"CESD 72m", "Total postnatal experience of depression (AUC)"),
+#        xlab = "ADHD" # empty x-lab
+# )
 mapply(myBox,
        x = NEW[,c("Pren_CESD", "HWB6_CESD", "HWB12_CESD", "HWB24_CESD", "HWB36_CESD",	"HWB48_CESD",	"HWB60_CESD",	"HWB72_CESD", "auc_post_cesd")],
        y = list(NEW$ADHD_d), # we make this a list so it has length(1)
-       ylab = c("Prenatal CESD", "CESD 6m", "CESD 12m", "CESD 24m", "CESD 36m",	"CESD 48m",	"CESD 60m",	"CESD 72m", "Total postnatal experience of depression (AUC)"),
+       ylab = c("Prenatal Depression", "Depression 6m", "Depression 12m", "Depression 24m", "Depression 36m",	"Depression 48m",	"Depression 60m",	"Depression 72m", "Total Postnatal Depression"),
        xlab = "ADHD" # empty x-lab
 )
 dev.off()
