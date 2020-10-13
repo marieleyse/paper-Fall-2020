@@ -16,9 +16,10 @@ corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "upper",
 
 dev.off()
 
+
 #####PANEL A
 
-pdf("adhd_factors_questionnaires.pdf", width=6, height=4, compress=FALSE)
+pdf("adhd_factors_questionnaires.pdf", width=5, height=5, compress=FALSE)
 
 
 mydata.cor = stats::cor(NEW[, c("ADHD", "Mother",	"Father",	"Teacher", "gender_male",
@@ -48,40 +49,56 @@ res1 <- corrplot::cor.mtest(NEW[, c("ADHD", "Mother",	"Father",	"Teacher", "gend
                                     "SDQ72_father_hyperactivity", 
                                     "SDQ72_teacher_hyperactivity")], conf.level = .95, method ="kendall",  alternative = "two.sided", exact=FALSE, use = "pairwise")
 
-colnames(mydata.cor) <-c("ADHD",	"Mother",	"Father",	"Teacher", "Male",
-                         "PAPA ADHD number of symptoms", "PAPA ADHD diagnosis",
-                         "Dominic ADHD", 
+colnames(mydata.cor) <-c("ADHD",	"Mother",	"Father",	"Teacher", "Child sex (male=1)",
+                         "PAPA ADHD # of symptoms 72m", "PAPA ADHD diagnosis 72m",
+                         "Dominic ADHD 72m", 
                          "Conners mother ADHD 60m", "Conners father ADHD 60m", 
                          "Conners mother ADHD 72m", "Conners father ADHD 72m", 
                          "Conners teacher ADHD 72m",
-                         "CBCL hyperactivity 48m", "CBCL hyperactivity 60m", 
+                         "CBCL Attention problems 48m", "CBCL Attention problems 60m", 
                          "SDQ mother hyperactivity 60m", 
                          "SDQ father hyperactivity 60m", 
                          "SDQ mother hyperactivity 72m", 
                          "SDQ father hyperactivity 72m", 
                          "SDQ teacher hyperactivity 72m")
 
-rownames(mydata.cor) <-c("ADHD",	"Mother",	"Father",	"Teacher", "Male",
-                         "PAPA ADHD number of symptoms", "PAPA ADHD diagnosis",
-                         "Dominic ADHD", 
+rownames(mydata.cor) <-c("ADHD",	"Mother",	"Father",	"Teacher", "Child sex (male=1)",
+                         "PAPA ADHD # of symptoms 72m", "PAPA ADHD diagnosis 72m",
+                         "Dominic ADHD 72m", 
                          "Conners mother ADHD 60m", "Conners father ADHD 60m", 
                          "Conners mother ADHD 72m", "Conners father ADHD 72m", 
                          "Conners teacher ADHD 72m",
-                         "CBCL hyperactivity 48m", "CBCL hyperactivity 60m", 
+                         "CBCL Attention problems 48m", "CBCL Attention problems 60m", 
                          "SDQ mother hyperactivity 60m", 
                          "SDQ father hyperactivity 60m", 
                          "SDQ mother hyperactivity 72m", 
                          "SDQ father hyperactivity 72m", 
                          "SDQ teacher hyperactivity 72m")
 
-corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "upper",
-                   sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6,  tl.srt = 45,
-                   insig = "label_sig", pch.col = "black", tl.col = "black")
+# corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "upper",
+#                    sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6, tl.srt = 45,
+#                    insig = "label_sig", pch.col = "black", tl.col = "black", cl.pos = "r")
+corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "lower",
+                   sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6, 
+                   insig = "label_sig", pch.col = "black", tl.col = "black", cl.pos = "b")
+
+#tl.srt = 15,
+# cl.pos = "n"
+# cl.pos = "b"
+# cl.align = "r"
 
 dev.off()
 
+sink("panela.txt")
+
+print(mydata.cor)
+
+print(res1$p)
+
+sink()
+
 ########PANEL B
-pdf("adhd_factors_risk_factors.pdf", width=5, height=4, compress=FALSE)
+pdf("adhd_factors_risk_factors.pdf", width=5, height=5, compress=FALSE)
 
 mydata.cor = stats::cor(NEW[, c("ADHD", "Mother", "Father",	"Teacher", "gender_male",
                                 "mom_age_birth", "above_college", "Pren_income4", 
@@ -95,27 +112,39 @@ res1 <- corrplot::cor.mtest(NEW[, c("ADHD", "Mother",	"Father",	"Teacher", "gend
                                     "birth_wt_grams",	
                                     "gestation_age_wks")],  method ="kendall",  use = "pairwise")
 
-colnames(mydata.cor) <- c("ADHD", "Mother",	"Father",	"Teacher", "Male",
-                          "Maternal age at birth", "Maternal education", "Prenatal income", 
+colnames(mydata.cor) <- c("ADHD", "Mother",	"Father",	"Teacher", "Child sex (male=1)",
+                          "Maternal age at birth (yrs)", "Maternal education (College and higher = 1)", "Annual familial income (CDN)", 
                           "Prenatal adverse life events",  
                           "Birth weight grams",	
                           "Gestational age weeks")
 
-rownames(mydata.cor) <- c("ADHD", "Mother",	"Father",	"Teacher", "Male",
-                          "Maternal age at birth", "Maternal education", "Prenatal income", 
+rownames(mydata.cor) <- c("ADHD", "Mother",	"Father",	"Teacher", "Child sex (male=1)",
+                          "Maternal age at birth (yrs)", "Maternal education (College and higher = 1)", "Annual familial income (CDN)", 
                           "Prenatal adverse life events",  
                           "Birth weight grams",	
                           "Gestational age weeks")
 
-corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "upper",
-                   sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6,  tl.srt = 45,
-                   insig = "label_sig", pch.col = "black", tl.col = "black")
+# corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "upper",
+#                    sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6, tl.srt = 45,
+#                    insig = "label_sig", pch.col = "black", tl.col = "black", cl.pos = "r")
+corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "lower",
+                   sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6, 
+                   insig = "label_sig", pch.col = "black", tl.col = "black", cl.pos = "b")
+
 
 dev.off()
 
+sink("panelb.txt")
+
+print(mydata.cor)
+
+print(res1$p)
+
+sink()
+
 ######PANEL C
 # png(filename = 'adhd_factors_depression_rater.png')
-pdf("adhd_factors_depression_rater.pdf", width=10, height=4, compress=FALSE)
+pdf("adhd_factors_depression_rater.pdf", width=5, height=5, compress=FALSE)
 
 
 
@@ -126,24 +155,45 @@ res1 <- corrplot::cor.mtest(NEW[, c("ADHD", "Mother",	"Father",	"Teacher", "gend
                                     "Pren_CESD", "HWB6_CESD",	"HWB12_CESD",	
                                     "HWB24_CESD",	"HWB36_CESD",	"HWB48_CESD",	"HWB60_CESD",	"HWB72_CESD", "auc_post_cesd")],  method ="kendall",  use = "pairwise")
 
-colnames(mydata.cor) <- c("ADHD", "Mother",	"Father",	"Teacher", "Male", 
-                           "Prenatal CESD", "CESD 6m",	"CESD 12 m",	
-                          "CESD 24m",	"CESD 36m",	"CESD 48m",	"CESD 60m",	"CESD 72m", "Postnatal depression")
-  
-rownames(mydata.cor) <- c("ADHD", "Mother",	"Father",	"Teacher", "Male", 
+# colnames(mydata.cor) <- c("ADHD", "Mother",	"Father",	"Teacher", "Child sex (male=1)", 
+#                            "Prenatal CESD", "CESD 6m",	"CESD 12 m",	
+#                           "CESD 24m",	"CESD 36m",	"CESD 48m",	"CESD 60m",	"CESD 72m", "Postnatal depression")
+#   
+# rownames(mydata.cor) <- c("ADHD", "Mother",	"Father",	"Teacher", "Child sex (male=1)", 
+#                           "Prenatal CESD", "CESD 6m",	"CESD 12 m",	
+#                           "CESD 24m",	"CESD 36m",	"CESD 48m",	"CESD 60m",	"CESD 72m", "Postnatal depression")
+
+colnames(mydata.cor) <- c("ADHD", "Mother",	"Father",	"Teacher", "Child sex (male=1)", 
                           "Prenatal CESD", "CESD 6m",	"CESD 12 m",	
                           "CESD 24m",	"CESD 36m",	"CESD 48m",	"CESD 60m",	"CESD 72m", "Postnatal depression")
 
-corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "upper",
-                   sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6,  tl.srt = 45,
-                   insig = "label_sig", pch.col = "black", tl.col = "black")
+rownames(mydata.cor) <- c("ADHD", "Mother",	"Father",	"Teacher", "Child sex (male=1)", 
+                          "Prenatal Depression", "Depression 6m",	"Depression 12 m",	
+                          "Depression 24m",	"Depression 36m",	"Depression 48m",	"Depression 60m",	"Depression 72m", "Postnatal depression")
+
+
+# corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "upper",
+#                    sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6, tl.srt = 45,
+#                    insig = "label_sig", pch.col = "black", tl.col = "black", cl.pos = "r")
+corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "lower",
+                   sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6, 
+                   insig = "label_sig", pch.col = "black", tl.col = "black", cl.pos = "b")
+
 
 dev.off()
+
+sink("panelc.txt")
+
+print(mydata.cor)
+
+print(res1$p)
+
+sink()
 
 # 
 # png(filename = 'adhd_factors_external_factors.png', width=1000, height=400, res=300)
 ######PANEL D
-pdf("adhd_factors_external_factors.pdf", width=7, height=4, compress=FALSE)
+pdf("adhd_factors_external_factors.pdf", width=5, height=5, compress=FALSE)
 
 mydata.cor = stats::cor(NEW[, c("ADHD", "Mother",	"Father",	"Teacher", "CBCL48_sc5raw.y", "CBCL60_sc5raw.y",
                          "Conduct_Disorder", "ODD","Dominic72_cd", "Dominic72_odd",
@@ -162,33 +212,46 @@ res1 <- corrplot::cor.mtest(NEW[, c("ADHD",	"Mother",	"Father",	"Teacher", "CBCL
                           "conners_mother_cognitive_score.72m", "conners_father_cognitive_score.72m", 
                           "conners_teacher_cognitive_score.72m")], conf.level = .95, method ="kendall",  alternative = "two.sided", exact=FALSE, use = "pairwise")
 
-colnames(mydata.cor) <- c("ADHD",	"Mother",	"Father",	"Teacher", "CBCL 48 sleep problems", "CBCL 60 sleep problems",
-                          "Conduct Disorder", "ODD","Dominic 72 CD", "Dominic 72 ODD",
-                          "Comorbidities Number", "Comorbidity",
+colnames(mydata.cor) <- c("ADHD",	"Mother",	"Father",	"Teacher", "CBCL sleep problems 48m", "CBCL sleep problems 60m",
+                          "PAPA Conduct Disorder 72m", "PAPA Oppositional Defiance Disorder 72m","Dominic Conduct Disorder 72m", "Dominic Oppositional Defiance Disorder 72m",
+                          "PAPA Comorbidities Number 72m", "PAPA Comorbidity 72m",
                           "Conners mother hyperactivity score 60m", "Conners father hyperactivity score 60m", 
                           "Conners mother hyperactivity score 72m", "Conners father hyperactivity score 72m", 
-                          "Conners teacher hyperactivity score 72m","Conners mother cognitive score 60m", "conners father cognitive score 60m", 
+                          "Conners teacher hyperactivity score 72m","Conners mother cognitive score 60m", "Conners father cognitive score 60m", 
                           "Conners mother cognitive score 72m", "Conners father cognitive score 72m", 
                           "Conners teacher cognitive score 72m")
-rownames(mydata.cor) <- c("ADHD",	"Mother",	"Father",	"Teacher", "CBCL 48 sleep problems", "CBCL 60 sleep problems",
-                          "Conduct Disorder", "ODD","Dominic 72 CD", "Dominic 72 ODD",
-                          "Comorbidities Number", "Comorbidity",
+rownames(mydata.cor) <- c("ADHD",	"Mother",	"Father",	"Teacher", "CBCL sleep problems  48m", "CBCL sleep problems  60m",
+                          "PAPA Conduct Disorder 72m", "PAPA Oppositional Defiance Disorder 72m","Dominic Conduct Disorder 72m", "Dominic Oppositional Defiance Disorder 72m",
+                          "PAPA Comorbidities Number 72m", "PAPA Comorbidity 72m",
                           "Conners mother hyperactivity score 60m", "Conners father hyperactivity score 60m", 
                           "Conners mother hyperactivity score 72m", "Conners father hyperactivity score 72m", 
-                          "Conners teacher hyperactivity score 72m","Conners mother cognitive score 60m", "conners father cognitive score 60m", 
+                          "Conners teacher hyperactivity score 72m","Conners mother cognitive score 60m", "Conners father cognitive score 60m", 
                           "Conners mother cognitive score 72m", "Conners father cognitive score 72m", 
                           "Conners teacher cognitive score 72m")
 
 corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "upper",
-         sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6,  tl.srt = 45,
-         insig = "label_sig", pch.col = "black", tl.col = "black")
+                   sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6, tl.srt = 45,
+                   insig = "label_sig", pch.col = "black", tl.col = "black", cl.pos = "r")
+corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "lower",
+                   sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6, 
+                   insig = "label_sig", pch.col = "black", tl.col = "black", cl.pos = "b")
+
+
 
 dev.off()
+
+sink("paneld.txt")
+
+print(mydata.cor)
+
+print(res1$p)
+
+sink()
 
 # png(filename = 'adhd_factors_vs_adhd_prs.png', width=1000, height=400)
 
 #####PANEL E
-pdf("adhd_factors_vs_adhd_prs.pdf", width=5, height=4, compress=FALSE)
+pdf("adhd_factors_vs_adhd_prs.pdf", width=5, height=5, compress=FALSE)
 
 
 mydata.cor = stats::cor(NEW[, c("ADHD",	"Mother",	"Father",	"Teacher", 
@@ -204,22 +267,33 @@ res1 <- corrplot::cor.mtest(NEW[, c("ADHD",	"Mother",	"Father",	"Teacher",
                                     "PRS_0_0001_adhd_child")], conf.level = .95, method ="kendall",  alternative = "two.sided", exact=FALSE, use = "pairwise")
 
 rownames(mydata.cor) <-c("ADHD",	"Mother",	"Father",	"Teacher",  
-             "Child PRS .5 ADHD", "Child PRS .2 ADHD", 
-             "Child PRS .1 ADHD", "Child PRS .05",
-             "Child PRS .01 ADHD", "Child PRS .001 ADHD", 
-             "Child PRS .0001 ADHD")
+             "Child ADHD PRS .5", "Child ADHD PRS .2", 
+             "Child ADHD PRS .1", "Child ADHD PRS .05",
+             "Child ADHD PRS .01", "Child ADHD PRS .001", 
+             "Child ADHD PRS .0001")
 
 colnames(mydata.cor) <-c("ADHD",	"Mother",	"Father",	"Teacher",  
-             "Child PRS .5 ADHD", "Child PRS .2 ADHD", 
-             "Child PRS .1 ADHD", "Child PRS .05",
-             "Child PRS .01 ADHD", "Child PRS .001 ADHD", 
-             "Child PRS .0001 ADHD")
+                         "Child ADHD PRS .5", "Child ADHD PRS .2", 
+                         "Child ADHD PRS .1", "Child ADHD PRS .05",
+                         "Child ADHD PRS .01", "Child ADHD PRS .001", 
+                         "Child ADHD PRS .0001")
 
-corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "upper",
-                   sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6,  tl.srt = 45,
-                   insig = "label_sig", pch.col = "black", tl.col = "black")
+# corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "upper",
+#                    sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6, tl.srt = 45,
+#                    insig = "label_sig", pch.col = "black", tl.col = "black", cl.pos = "r")
+corrplot::corrplot(mydata.cor, p.mat = res1$p, method = "color", type = "lower",
+                   sig.level = c(.001, .01), pch.cex = .8, tl.cex = .6, 
+                   insig = "label_sig", pch.col = "black", tl.col = "black", cl.pos = "b")
 
 dev.off()
+
+sink("panele.txt")
+
+print(mydata.cor)
+
+print(res1$p)
+
+sink()
 
 #########OTHER OPTIONS
 #TO VIEW CORRELATIONS
