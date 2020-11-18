@@ -38,25 +38,59 @@ s <- summary(ADHD.fit, standardized = T, fit.measures = T)
 capture.output(s, file = "model_output_ADHD_model_fiml_ADHD_rater.txt")
 sink()
 
+sink('omega.txt')
+reliability(ADHD.fit, return.total = TRUE, dropSingle = TRUE,
+            omit.imps = c("no.conv", "no.se"))
+lavInspect(ADHD.fit, "cov.lv")
+ADHDfactor.data <- subsample_one_item_present[c("CBCL48_sc6raw.y", "SDQ60_mother_hyperactivity","SDQ60_father_hyperactivity", "CBCL60_sc6raw.y","conners_mother_adhd_score.60m", "conners_father_adhd_score.60m", "conners_mother_adhd_score.72m", "conners_father_adhd_score.72m", "conners_teacher_adhd_score.72m", "PAPA_p4nadhd", "PAPA_p4_adhd", "Dominic72_ADHD","SDQ72_mother_hyperactivity", "SDQ72_father_hyperactivity", "SDQ72_teacher_hyperactivity")]
+omega(ADHDfactor.data,nfactors=3,fm="ml",n.iter=1,p=.05,poly=FALSE,key=NULL,
+      flip=TRUE,digits=2, title="Omega",sl=TRUE,labels=NULL,
+      plot=TRUE,n.obs=NA,rotate="oblimin",Phi=NULL,option="equal",covar=FALSE)
+omegaSem(ADHDfactor.data,nfactors=3,fm="ml",key=NULL,flip=TRUE,digits=2,title="Omega",
+         sl=TRUE,labels=NULL, plot=TRUE,n.obs=NA,rotate="oblimin",
+         Phi = NULL, option="equal",lavaan=TRUE)
+omegah(ADHDfactor.data,nfactors=3,fm="ml",key=NULL,flip=TRUE, 
+       digits=2,title="Omega",sl=TRUE,labels=NULL, plot=TRUE,
+       n.obs=NA,rotate="oblimin",Phi = NULL,option="equal",covar=FALSE) 
+# omegaFromSem(ADHD.fit,m=NULL,flip=TRUE,plot=TRUE)
+# o <- lavInspect(ADHD.fit, what ='fit')
+# capture.output(o, file = "fit_indices_omega.txt")
+# s <- summary(ADHD.fit, standardized = T, fit.measures = T)
+# capture.output(s, file = "model_output_omega.txt")
+sink()
+
 semPaths(ADHD.fit, "par", weighted = FALSE, nCharNodes = 7, shapeMan = "rectangle",
          sizeMan = 8, sizeMan2 = 5)
 semPaths(ADHD.fit, "std", weighted = FALSE, nCharNodes = 7, shapeMan = "rectangle",
          sizeMan = 8, sizeMan2 = 5)
 
-
 #png(filename = 'adhd_latent_factor.png', width=1000, height=400)
-pdf("adhd_latent_factor.pdf", width=10, height=4, compress = FALSE)
+pdf("adhd_latent_factor.pdf", width=2, height=1, compress = FALSE)
 # cols <- wes_palette(name = "Zissou1", n = 5, type = "discrete")
 # colorlist <- list(man = cols[2], lat = cols[5])
 cols <- wes_palette(name = "FantasticFox1", n = 5, type = "discrete")
 colorlist <- list(man = cols[3], lat = cols[4])
-semPaths(ADHD.fit, what = "model", bifactor = "ADHD", whatLabels = "std", layout = "tree2",  
-         color = colorlist, nCharNodes = 7, sizeMan = 7, sizeMan2 = 4,rotation=4,
-         shapeMan = "rectangle", intercepts =FALSE, residuals=FALSE, curve=0.5, fade = F, curvePivot = TRUE, arrows = 1,
-         edge.label.cex=0.5, edge.label.position=0.75, exoCov = FALSE, nodeLabels =c("Dominic 72"," CBCL 48  ", "  SDQ 60  ", " CBCL 60  ", "Conners 60", "Conners 72", " PAPA 72  ",
-                                                                                     "  SDQ 72  ", "  SDQ 60  ", "Conners 60", "Conners 72", "  SDQ 72  ", "Conners 72", "  SDQ 72  ", "ADHD", "Mother", "Father", "Teacher"))
-dev.off()
+colorlist <- list(man = cols[3], lat = cols[4], man = cols[5])
+# semPaths(ADHD.fit, what = "model", bifactor = "ADHD", whatLabels = "std", layout = "tree2", 
+#          color = colorlist, nCharNodes = 7, sizeMan = 7, sizeMan2 = 4,rotation=4,
+#          shapeMan = "rectangle", intercepts =FALSE, residuals=FALSE, curve=0.5, fade = F, curvePivot = TRUE, arrows = 1,
+#          edge.label.cex=0.5, edge.label.position=0.75, exoCov = FALSE, nodeLabels =c("Dominic 72"," CBCL 48  ", "  SDQ 60  ", " CBCL 60  ", "Conners 60", "Conners 72", " PAPA 72  ",
+#                                                                                      "  SDQ 72  ", "  SDQ 60  ", "Conners 60", "Conners 72", "  SDQ 72  ", "Conners 72", "  SDQ 72  ", "ADHD", "Mother", "Father", "Teacher"))
+semPaths(ADHD.fit, what = "model", bifactor = "ADHD", whatLabels = "std", layout = "tree2", 
+         color = colorlist, nCharNodes = 0,rotation=2, shapeMan = "rectangle", sizeMan = 20, sizeMan2 = 2,
+         intercepts =FALSE, residuals=FALSE, curve=1, fade = F, curvePivot = TRUE, arrows = 1,
+         edge.label.cex=1, edge.label.position=0.65, mar = c(1,1,1,1), exoCov = FALSE, label.cex = 1, nodeLabels =c("Dominic ADHD 72m","CBCL Attention 48m", "    SDQ H 60m    ", " CBCL Attention 60m", "Conners ADHD 60m", "Conners ADHD 72m", "PAPA ADHD 72m",
+                                                                                     "    SDQ H 72m    ", "    SDQ H 60m    ", "Conners ADHD 60m  ", "Conners ADHD 72m", "    SDQ H 72m    ", "Conners ADHD 72m", "    SDQ H 72m    ", "ADHD", "Mother", "Father", "Teacher"))
+        dev.off()
 
+         #groups = "latents", 
+#grps = list(Mother=c("CBCL48_sc6raw.y", "SDQ60_mother_hyperactivity", "CBCL60_sc6raw.y", "conners_mother_adhd_score.60m", "conners_mother_adhd_score.72m", "PAPA_p4nadhd", "SDQ72_mother_hyperactivity"), Father=c("SDQ60_father_hyperactivity","conners_father_adhd_score.60m","conners_father_adhd_score.72m", "SDQ72_father_hyperactivity"), Teacher=c("conners_teacher_adhd_score.72m", "SDQ72_teacher_hyperactivity", Other = "Dominic72_ADHD"))
+#edge.label.cex=0.5, edge.label.position=0.65, mar = c(1,1,1,1), exoCov = FALSE, label.cex = 1, nodeLabels =c("Dominic ADHD 72m","CBCL Attention 48m", "    SDQ H 60m   ", " CBCL Attention 60m", "Conners ADHD 60m", "Conners ADHD 72m", "PAPA ADHD 72m",
+                                                                                                                     "    SDQ H 72m    ", "    SDQ H 60m    ", "Conners ADHD 60m  ", "Conners ADHD 72m", "    SDQ H 72m    ", "Conners ADHD 72m", "    SDQ H 72m    ", "      ADHD      ", "     Mother     ", "     Father     ", "     Teacher     "))
+
+#XKCD = TRUE
+# shapeMan = "rectangle", sizeMan = 20, sizeMan2 = 2,
+# sizeMan = 6,shapeMan = "circle",
 nodeLabels =c("Dominic","CBCL 48", "SDQ 60", "CBCL 60", "Conners 60", "Conners 72", "PAPA",
               "SDQ 72", "SDQ 60", "Conners 60", "Conners 72", "SDQ 72", "Conners 72", "SDQ 72", "ADHD", "Mother", "Father", "Teacher")
 
@@ -101,12 +135,20 @@ pdf("adhd_latent_factor_girls.pdf", width=10, height=4, compress = FALSE)
 # colorlist <- list(man = cols[2], lat = cols[5])
 cols <- wes_palette(name = "FantasticFox1", n = 5, type = "discrete")
 colorlist <- list(man = cols[3], lat = cols[4])
-semPaths(ADHD.fit, what = "model", bifactor = "ADHD", whatLabels = "std", layout = "tree2",  
-         color = colorlist, nCharNodes = 7, sizeMan = 7, sizeMan2 = 4,rotation=2,
-         shapeMan = "rectangle", intercepts =FALSE, residuals=FALSE, curve=0.5, fade = F, curvePivot = TRUE, arrows = 1,
-         edge.label.cex=0.5, edge.label.position=0.75, exoCov = FALSE, nodeLabels =c("Dominic 72"," CBCL 48  ", "  SDQ 60  ", " CBCL 60  ", "Conners 60", "Conners 72", " PAPA 72  ",
-                                                                                     "  SDQ 72  ", "  SDQ 60  ", "Conners 60", "Conners 72", "  SDQ 72  ", "Conners 72", "  SDQ 72  ", "ADHD", "Mother", "Father", "Teacher"))
+# semPaths(ADHD.fit, what = "model", bifactor = "ADHD", whatLabels = "std", layout = "tree2",  
+#          color = colorlist, nCharNodes = 7, sizeMan = 7, sizeMan2 = 4,rotation=2,
+#          shapeMan = "rectangle", intercepts =FALSE, residuals=FALSE, curve=0.5, fade = F, curvePivot = TRUE, arrows = 1,
+#          edge.label.cex=0.5, edge.label.position=0.75, exoCov = FALSE, nodeLabels =c("Dominic 72"," CBCL 48  ", "  SDQ 60  ", " CBCL 60  ", "Conners 60", "Conners 72", " PAPA 72  ",
+#                                                                                      "  SDQ 72  ", "  SDQ 60  ", "Conners 60", "Conners 72", "  SDQ 72  ", "Conners 72", "  SDQ 72  ", "ADHD", "Mother", "Father", "Teacher"))
+# dev.off()
+
+semPaths(ADHD.fit, what = "model", bifactor = "ADHD", whatLabels = "std", layout = "tree2", 
+         color = colorlist, nCharNodes = 0,rotation=2, shapeMan = "rectangle", sizeMan = 20, sizeMan2 = 2,
+         intercepts =FALSE, residuals=FALSE, curve=1, fade = F, curvePivot = TRUE, arrows = 1,
+         edge.label.cex=1, edge.label.position=0.65, mar = c(1,1,1,1), exoCov = FALSE, label.cex = 1, nodeLabels =c("Dominic ADHD 72m","CBCL Attention 48m", "    SDQ H 60m    ", " CBCL Attention 60m", "Conners ADHD 60m", "Conners ADHD 72m", "PAPA ADHD 72m",
+                                                                                                                    "    SDQ H 72m    ", "    SDQ H 60m    ", "Conners ADHD 60m  ", "Conners ADHD 72m", "    SDQ H 72m    ", "Conners ADHD 72m", "    SDQ H 72m    ", "ADHD", "Mother", "Father", "Teacher"))
 dev.off()
+
 
 NEW <- read.csv("MAVAN_48M_and_up_jun2020.csv")
 NEW <- filter(NEW,gender_male == "1")
@@ -139,11 +181,17 @@ pdf("adhd_latent_factor_boys.pdf", width=10, height=4, compress = FALSE)
 # colorlist <- list(man = cols[2], lat = cols[5])
 cols <- wes_palette(name = "FantasticFox1", n = 5, type = "discrete")
 colorlist <- list(man = cols[3], lat = cols[4])
-semPaths(ADHD.fit, what = "model", bifactor = "ADHD", whatLabels = "std", layout = "tree2",  
-         color = colorlist, nCharNodes = 7, sizeMan = 7, sizeMan2 = 4,rotation=2,
-         shapeMan = "rectangle", intercepts =FALSE, residuals=FALSE, curve=0.5, fade = F, curvePivot = TRUE, arrows = 1,
-         edge.label.cex=0.5, edge.label.position=0.75, exoCov = FALSE, nodeLabels =c("Dominic 72"," CBCL 48  ", "  SDQ 60  ", " CBCL 60  ", "Conners 60", "Conners 72", " PAPA 72  ",
-                                                                                     "  SDQ 72  ", "  SDQ 60  ", "Conners 60", "Conners 72", "  SDQ 72  ", "Conners 72", "  SDQ 72  ", "ADHD", "Mother", "Father", "Teacher"))
+# semPaths(ADHD.fit, what = "model", bifactor = "ADHD", whatLabels = "std", layout = "tree2",  
+#          color = colorlist, nCharNodes = 7, sizeMan = 7, sizeMan2 = 4,rotation=2,
+#          shapeMan = "rectangle", intercepts =FALSE, residuals=FALSE, curve=0.5, fade = F, curvePivot = TRUE, arrows = 1,
+#          edge.label.cex=0.5, edge.label.position=0.75, exoCov = FALSE, nodeLabels =c("Dominic 72"," CBCL 48  ", "  SDQ 60  ", " CBCL 60  ", "Conners 60", "Conners 72", " PAPA 72  ",
+#                                                                                      "  SDQ 72  ", "  SDQ 60  ", "Conners 60", "Conners 72", "  SDQ 72  ", "Conners 72", "  SDQ 72  ", "ADHD", "Mother", "Father", "Teacher"))
+# dev.off()
+semPaths(ADHD.fit, what = "model", bifactor = "ADHD", whatLabels = "std", layout = "tree2", 
+         color = colorlist, nCharNodes = 0,rotation=2, shapeMan = "rectangle", sizeMan = 20, sizeMan2 = 2,
+         intercepts =FALSE, residuals=FALSE, curve=1, fade = F, curvePivot = TRUE, arrows = 1,
+         edge.label.cex=1, edge.label.position=0.65, mar = c(1,1,1,1), exoCov = FALSE, label.cex = 1, nodeLabels =c("Dominic ADHD 72m","CBCL Attention 48m", "    SDQ H 60m    ", " CBCL Attention 60m", "Conners ADHD 60m", "Conners ADHD 72m", "PAPA ADHD 72m",
+                                                                                                                    "    SDQ H 72m    ", "    SDQ H 60m    ", "Conners ADHD 60m  ", "Conners ADHD 72m", "    SDQ H 72m    ", "Conners ADHD 72m", "    SDQ H 72m    ", "ADHD", "Mother", "Father", "Teacher"))
 dev.off()
 
 ################
@@ -317,6 +365,17 @@ capture.output(o, file = "fit_indices_bi_adhd_model_invariance_configural.txt")
 s <- summary(fit, standardized = T, fit.measures = T)
 capture.output(s, file = "model_output_bi_adhd_model_invariance_configural.txt")
 sink()
+
+pdf("adhd_latent_factor_by_group.pdf", width=2, height=1, compress = FALSE)
+cols <- wes_palette(name = "FantasticFox1", n = 5, type = "discrete")
+colorlist <- list(man = cols[3], lat = cols[4])
+colorlist <- list(man = cols[3], lat = cols[4], man = cols[5])   
+semPaths(fit, what = "model", bifactor = "ADHD", whatLabels = "std", layout = "tree2",
+         color = colorlist, nCharNodes = 0,rotation=2, shapeMan = "rectangle", sizeMan = 20, sizeMan2 = 2,
+         intercepts =FALSE, residuals=FALSE, curve=1, fade = F, curvePivot = TRUE, arrows = 1,
+         edge.label.cex=1, edge.label.position=0.65, mar = c(1,1,1,1), exoCov = FALSE, label.cex = 1, nodeLabels =c("Dominic ADHD 72m","CBCL Attention 48m", "    SDQ H 60m    ", " CBCL Attention 60m", "Conners ADHD 60m", "Conners ADHD 72m", "PAPA ADHD 72m",
+                                                                                                                    "    SDQ H 72m    ", "    SDQ H 60m    ", "Conners ADHD 60m  ", "Conners ADHD 72m", "    SDQ H 72m    ", "Conners ADHD 72m", "    SDQ H 72m    ", "ADHD", "Mother", "Father", "Teacher"))
+dev.off()
 
 sink('bi_adhd_model_invariance_loadings.txt')
 fit <- cfa(ADHD.model2,
