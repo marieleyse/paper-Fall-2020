@@ -21,6 +21,72 @@ NEW$mean_centered_Smoking_During_Pregnancy = c(scale(NEW$Smoking_During_Pregnanc
 NEW$mean_centered_Pren_income4 = c(scale(NEW$Pren_income4)) 
 NEW$mean_centered_conners_mother_hyperactivity_score.72m = c(scale(NEW$conners_mother_hyperactivity_score.72m)) 
 
+pdf("interaction_plot_pre_post.pdf", width=10, height=4)
+fit4 <-lm(mean_centered_ADHD ~ mean_centered_Pren_CESD*mean_centered_auc_post_cesd + mean_centered_PRS_0_001_adhd_child + mean_centered_PC1 + mean_centered_PC2 + mean_centered_PC3 + mean_centered_mom_age_birth + above_college + gender_male + Hamilton, data=NEW)
+P = interact_plot(fit4, pred = mean_centered_auc_post_cesd, modx = mean_centered_Pren_CESD, interval = TRUE, plot.points = FALSE,colors = c("blue", "orange"),
+                  x.label = "Postnatal depression",
+                  y.label = "ADHD",
+                  modx.labels = c(" Low "," Moderate", " High"),
+                  pred.labels = "Postnatal depression",
+                  main.title = NULL,
+                  legend.main = "Prenatal depression")
+P + 
+  drop_gridlines() 
+dev.off()
+
+# pdf("interaction_plot_pre_post.pdf", width=10, height=4)
+# par(mfrow=c(1,3)) # 
+# fit4 <-lm(mean_centered_ADHD ~ mean_centered_Pren_CESD*mean_centered_auc_post_cesd + mean_centered_PRS_0_001_adhd_child + mean_centered_PC1 + mean_centered_PC2 + mean_centered_PC3 + mean_centered_mom_age_birth + above_college + gender_male + Hamilton, data=NEW)
+# 
+# equation1=function(x){coef(fit)[2]*x+coef(fit)[1]}
+# equation2=function(x){coef(fit)[2]*x+coef(fit)[1]+coef(fit)[3]}
+# 
+# ggplot(NEW,aes(mean_centered_ADHD,x=mean_centered_auc_post_cesd,color=gender_male))+geom_point()+
+#  facet_wrap(vars(mean_centered_Pren_CESD), ncol = 3) +
+#   stat_function(fun=equation1,geom="line",color=scales::hue_pal()(2)[1])+
+#   stat_function(fun=equation2,geom="line",color=scales::hue_pal()(2)[2])
+
+
+pdf("interaction_plot_pre_post2.pdf", width=10, height=4)
+fit4 <-lm(mean_centered_ADHD ~ mean_centered_Pren_CESD*mean_centered_auc_post_cesd + mean_centered_PRS_0_001_adhd_child + mean_centered_PC1 + mean_centered_PC2 + mean_centered_PC3 + mean_centered_mom_age_birth + above_college + gender_male + Hamilton, data=NEW)
+P = interact_plot(fit4, pred = mean_centered_Pren_CESD, modx = mean_centered_auc_post_cesd, interval = TRUE, plot.points = FALSE,colors = c("blue", "orange"),
+                  x.label = "Prenatal depression",
+                  y.label = "ADHD",
+                  modx.labels = c(" Low "," Moderate", " High"),
+                  pred.labels = "Prenatal depression",
+                  main.title = NULL,
+                  legend.main = "Postnatal depression")
+P + 
+  drop_gridlines() 
+dev.off()
+
+pdf("interaction_plot_pre_post_point.pdf", width=10, height=4)
+fit4 <-lm(mean_centered_ADHD ~ mean_centered_Pren_CESD*mean_centered_auc_post_cesd + mean_centered_PRS_0_001_adhd_child + mean_centered_PC1 + mean_centered_PC2 + mean_centered_PC3 + mean_centered_mom_age_birth + above_college + gender_male + Hamilton, data=NEW)
+P = interact_plot(fit4, pred = mean_centered_auc_post_cesd, modx = mean_centered_Pren_CESD, interval = TRUE, plot.points = TRUE,colors = c("blue", "orange"),
+                  x.label = "Postnatal depression",
+                  y.label = "ADHD",
+                  modx.labels = c(" Low "," Moderate", " High"),
+                  pred.labels = "Postnatal depression",
+                  main.title = NULL,
+                  legend.main = "Prenatal depression")
+P + 
+  drop_gridlines() 
+dev.off()
+
+pdf("interaction_plot_pre_post2_point.pdf", width=10, height=4)
+fit4 <-lm(mean_centered_ADHD ~ mean_centered_Pren_CESD*mean_centered_auc_post_cesd + mean_centered_PRS_0_001_adhd_child + mean_centered_PC1 + mean_centered_PC2 + mean_centered_PC3 + mean_centered_mom_age_birth + above_college + gender_male + Hamilton, data=NEW)
+P = interact_plot(fit4, pred = mean_centered_Pren_CESD, modx = mean_centered_auc_post_cesd, interval = TRUE, plot.points = TRUE,colors = c("blue", "orange"),
+                  x.label = "Prenatal depression",
+                  y.label = "ADHD",
+                  modx.labels = c(" Low "," Moderate", " High"),
+                  pred.labels = "Prenatal depression",
+                  main.title = NULL,
+                  legend.main = "Postnatal depression")
+P + 
+  drop_gridlines() 
+dev.off()
+
+
 #readr::write_csv(NEW, "/Users/Marie-Elyse/Downloads/MAVAN_SEP_PAPER_2020.csv")
 
 options("jtools-digits" = 2)  
@@ -32,10 +98,10 @@ P=interact_plot(fit4, pred = mean_centered_Pren_CESD, modx = gender_male, mod2 =
                 x.label = "Prenatal depression",
                 y.label = "ADHD",
                 pred.labels = "Prenatal depression",
-                modx.labels = c("Girls"=0,"Boys"=1),
-                mod2.labels = c("i) Low postnatal depression","ii) Average postnatal depression", "iii) High postnatal depression"),
+                modx.labels = c("Girls","Boys"),
+                mod2.labels = c(" Low "," Moderate", " High"),
                 main.title = NULL,
-                legend.main = "Sex")
+                legend.main = "Postnatal depression")
 P + 
   drop_gridlines()
 dev.off()
@@ -49,10 +115,10 @@ P=interact_plot(fit4, pred = mean_centered_Pren_CESD, modx = gender_male, mod2 =
                 x.label = "Prenatal depression",
                 y.label = "ADHD",
                 pred.labels = "Prenatal depression",
-                modx.labels = c("Girls"=0,"Boys"=1),
-                mod2.labels = c("i) Low postnatal depression","ii) Average postnatal depression", "iii) High postnatal depression"),
+                modx.labels = c("Girls","Boys"),
+                mod2.labels = c(" Low "," Moderate", " High"),
                 main.title = NULL,
-                legend.main = "Sex")
+                legend.main = "Postnatal depression")
 P + 
   drop_gridlines()
 dev.off()
@@ -66,7 +132,7 @@ P = interact_plot(fit4, pred = mean_centered_auc_post_cesd, modx = mean_centered
                   y.label = "ADHD",
                   pred.labels = "Postnatal depression",
                   mod2.labels = c("Girls","Boys"),
-                  modx.labels = c(" Low "," Average", " High"),
+                  modx.labels = c(" Low "," Moderate", " High"),
                   main.title = NULL,
                   legend.main = "Prenatal depression")
 P + 
@@ -82,7 +148,7 @@ P = interact_plot(fit4, pred = mean_centered_Pren_CESD, modx = mean_centered_auc
                   y.label = "ADHD",
                   pred.labels = "Prenatal depression",
                   mod2.labels = c("Girls","Boys"),
-                  modx.labels = c(" Low "," Average", " High"),
+                  modx.labels = c(" Low "," Moderate", " High"),
                   main.title = NULL,
                   legend.main = "Postnatal depression")
 P + 
@@ -97,8 +163,8 @@ P=interact_plot(fit4, pred = mean_centered_auc_post_cesd,modx = gender_male, mod
               x.label = "Postnatal depression",
               y.label = "ADHD",
               pred.labels = "Postnatal depression",
-              mod2.labels = c("i) Low prenatal depression ","ii) Average prenatal depression", "ii) High prenatal depression"),
-              modx.labels = c("Girls"=0,"Boys"=1),
+              mod2.labels = c(" Low "," Moderate", " High"),
+              modx.labels = c("Girls","Boys"),
               main.title = NULL,
               legend.main = "Sex")
 P + 
@@ -113,8 +179,8 @@ P=interact_plot(fit4, pred = mean_centered_auc_post_cesd,modx = gender_male, mod
               x.label = "Postnatal depression",
               y.label = "ADHD",
               pred.labels = "Postnatal depression",
-              mod2.labels = c("i) Low prenatal depression ","ii) Average prenatal depression", "iii) High prenatal depression"),
-              modx.labels = c("Girls"=0,"Boys"=1),
+              mod2.labels = c(" Low "," Moderate", " High"),
+              modx.labels = c("Girls","Boys"),
               main.title = NULL,
               legend.main = "Sex")
 P + 
